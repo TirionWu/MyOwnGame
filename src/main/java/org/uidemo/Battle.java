@@ -1,27 +1,44 @@
 package org.uidemo;
 
-import java.security.spec.ECField;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.uidemo.callback.BattleResult;
+import org.uidemo.callback.RoundResultHandler;
 
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 public class Battle {
+    private final RoundResultHandler roundResultHandler;
+    private final Role host, guest;
+    private double initHostHealth,initGuestHealth;
+    private boolean finished = false;
 
-    public  static String battle(Role role1,Role role2){
-         while (role1.getHp()>0 && role2.getHp() >0) {
-             double role1NewHp = role1.getHp()-role2.getAtk()/(role2.getAtk()+role1.getDef());
-             double role2NewHp = role2.getHp()-role1.getAtk()/(role1.getAtk()+role2.getDef());
-             System.out.println(role1.getName()+"剩余血量"+role1NewHp +"\n" +role2.getName()+"剩余血量"+role2NewHp);
-             role1.setHp(role1NewHp);
-             role2.setHp(role2NewHp);
-         }
+    public String battle() {
+        initHostHealth = host.getHp();
+        initGuestHealth = guest.getHp();
+        while (host.getHp() > 0 && guest.getHp() > 0) {
+            BattleResult.BattleResultBuilder builder = BattleResult.builder().host(host).guest(guest);
+            builder.hostOldHP(host.getHp()).guestOldHP(guest.getHp());
+            builder.initGuestHealth(initGuestHealth).initHostHealth(initHostHealth);
+            double hostNewHp = host.getHp() - guest.getAtk() / (guest.getAtk() + host.getDef());
+            double guestNewHp = guest.getHp() - host.getAtk() / (host.getAtk() + guest.getDef());
+            builder.hostNewHP(hostNewHp).guestNewHP(guestNewHp);
+            host.setHp(hostNewHp);
+            guest.setHp(guestNewHp);
+            if (roundResultHandler != null)
+                roundResultHandler.onResultReceived(builder.build());
+        }
 
-         if(role1.getHp()<=0&&role2.getHp()<=0){
-             return "平局";
-         }
-         else if(role1.getHp()>0&&role2.getHp()<=0){
-             return (role1.getName()+"获胜");
-         }
-         else if(role1.getHp()<=0&&role2.getHp()>0){
-             return (role2.getName()+"获胜");
-         }
-        else throw new  IllegalStateException("战斗出现异常");
+        if (host.getHp() <= 0 && guest.getHp() <= 0) {
+            return "平局";
+        } else if (host.getHp() > 0 && guest.getHp() <= 0) {
+            return (host.getName() + "获胜");
+        } else if (host.getHp() <= 0 && guest.getHp() > 0) {
+            return (guest.getName() + "获胜");
+        } else throw new IllegalStateException("战斗出现异常");
     }
 }
