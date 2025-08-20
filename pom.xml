@@ -30,12 +30,16 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.1</version>
+                <configuration>
+                    <executable>java</executable>
+                    <mainClass>org.uidemo.Main</mainClass>
+                </configuration>
                 <executions>
                     <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
+<!--                        <phase>test</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>java</goal>-->
+<!--                        </goals>-->
                         <configuration>
                             <mainClass>org.uidemo.Main</mainClass>
                         </configuration>
