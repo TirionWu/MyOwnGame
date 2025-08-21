@@ -1,0 +1,11 @@
+role1:
+  name: "勇者"
+  hp: 200
+  atk: 15
+  def: 30
+
+role2:
+  name: "魔龙"
+  hp: 200
+  atk: 50
+  def: 0
