@@ -1,25 +1,25 @@
 package org.uidemo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.uidemo.callback.BattleResult;
 import org.uidemo.callback.RoundResultHandler;
 
-@RequiredArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Data
 public class Battle {
     private final RoundResultHandler roundResultHandler;
+    @NonNull
     private final Role host, guest;
-    private double initHostHealth,initGuestHealth;
+    private Double initHostHealth, initGuestHealth;
     private boolean finished = false;
 
     public String battle() {
-        initHostHealth = host.getHp();
-        initGuestHealth = guest.getHp();
+        initHostHealth = initHostHealth != null ? initHostHealth : host.getHp();
+        initGuestHealth = initGuestHealth != null ? initGuestHealth : guest.getHp();
+        host.setHp(initHostHealth);
+        guest.setHp(initGuestHealth);
         while (host.getHp() > 0 && guest.getHp() > 0) {
             BattleResult.BattleResultBuilder builder = BattleResult.builder().host(host).guest(guest);
             builder.hostOldHP(host.getHp()).guestOldHP(guest.getHp());
