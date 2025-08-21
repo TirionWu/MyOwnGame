@@ -3,6 +3,8 @@ package org.uidemo;
 import org.uidemo.callback.BattleResult;
 import org.uidemo.callback.RoundResultHandler;
 
+import java.util.Map;
+
 //TIP 要<b>运行</b>代码，请按 <shortcut actionId="Run"/> 或
 // 点击装订区域中的 <icon src="AllIcons.Actions.Execute"/> 图标。
 public class Main {
@@ -16,9 +18,10 @@ public class Main {
      * 战斗结束后清屏。
      */
     public static void main(String[] args) {
-
-        Role role1 = Role.builder().name("role1").atk(15).def(30).hp(200).build();
-        Role role2 = Role.builder().name("role2").atk(50).def(0).hp(200).build();
+        // 从YAML文件加载角色信息
+        Role role1 = YamlUtil.loadRoleFromYaml("player-info.yml", "role1");
+        Role role2 = YamlUtil.loadRoleFromYaml("player-info.yml", "role2");
+        
         RoundResultHandler handler = res -> {
             showHumans();
             displayBattleTexts(res);
@@ -29,12 +32,8 @@ public class Main {
             }
         };
         Battle battle = Battle.builder().host(role1).guest(role2).roundResultHandler(handler).build();
-        try {
-            System.out.println(battle.battle());
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-        clearConsole();
+        battle.battle();
+        clearScreen();
     }
 
     /**
@@ -143,5 +142,13 @@ public class Main {
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * 清屏方法
+     */
+    private static void clearScreen() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
+    }
 }
