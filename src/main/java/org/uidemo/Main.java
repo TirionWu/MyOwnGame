@@ -17,14 +17,14 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Role role1 = Role.builder().name("role1").atk(15).def(30).hp(200).build();
-        Role role2 = Role.builder().name("role2").atk(50).def(0).hp(200).build();
+        Role role1 = Role.builder().name("role1").atk(55).def(30).hp(200).build();
+        Role role2 = Role.builder().name("role2").atk(100).def(10).hp(200).build();
         RoundResultHandler handler = res -> {
             showHumans();
             displayBattleTexts(res);
             displayHealthBar(res);
             try {
-                Thread.sleep(500);
+                Thread.sleep(50);
             } catch (Throwable ignored) {
             }
         };
@@ -71,7 +71,7 @@ public class Main {
     /**
      * 显示战斗文本信息，包括角色名称和当前生命值。
      *
-     * @param res 战斗回合结果对象，包含当前双方角色的信息
+         * @param res 战斗回合结果对象，包含当前双方角色的信息
      */
     private static void displayBattleTexts(BattleResult res) {
         showFieldsFromBothSides(res.getHost().getName(), res.getGuest().getName());
