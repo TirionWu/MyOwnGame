@@ -44,9 +44,9 @@ public class Main {
      * @param res 战斗回合结果对象，包含当前双方角色的生命值信息
      */
     private static void displayHealthBar(BattleResult res) {
-        double host_percentage = res.getHostNewHP() / res.getInitHostHealth();
+        double host_percentage = res.hostNewHP() / res.initHostHealth();
         int host_len = (int) (host_percentage * MAX_HEALTH_BAR_LEN);
-        double guest_percentage = res.getGuestNewHP() / res.getInitGuestHealth();
+        double guest_percentage = res.guestNewHP() / res.initGuestHealth();
         int guest_len = (int) (guest_percentage * MAX_HEALTH_BAR_LEN);
 
         // 绘制生命条框架
@@ -74,8 +74,8 @@ public class Main {
          * @param res 战斗回合结果对象，包含当前双方角色的信息
      */
     private static void displayBattleTexts(BattleResult res) {
-        showFieldsFromBothSides(res.getHost().getName(), res.getGuest().getName());
-        showFieldsFromBothSides(res.getHost().getHp(), res.getGuest().getHp());
+        showFieldsFromBothSides(res.host().getName(), res.guest().getName());
+        showFieldsFromBothSides(res.host().getHp(), res.guest().getHp());
     }
 
     /**
