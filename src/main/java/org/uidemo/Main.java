@@ -17,8 +17,11 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Role role1 = Role.builder().name("role1").atk(55).def(30).hp(200).build();
-        Role role2 = Role.builder().name("role2").atk(100).def(10).hp(200).build();
+//        Role role1 = Role.builder().name("role1").atk(55).def(30).hp(200).build();
+//        Role role2 = Role.builder().name("role2").atk(100).def(10).hp(200).build();
+        String fileName = "player-info.yml";
+        Role host = YamlUtil.loadRoleFromYaml(fileName, "role1");
+        Role guest = YamlUtil.loadRoleFromYaml(fileName, "role2");
         RoundResultHandler handler = res -> {
             showHumans();
             displayBattleTexts(res);
@@ -28,7 +31,7 @@ public class Main {
             } catch (Throwable ignored) {
             }
         };
-        Battle battle = Battle.builder().host(role1).guest(role2).roundResultHandler(handler).build();
+        Battle battle = Battle.builder().host(host).guest(guest).roundResultHandler(handler).build();
         try {
             System.out.println(battle.battle());
         } catch (IllegalStateException e) {
@@ -114,17 +117,12 @@ public class Main {
      */
     private static boolean isPrintNeeded(int row, int col) {
         int toFrame = FRAME - col - 1;
-        switch (row) {
-            case 0:
-            case 2:
-                return col == 1 || toFrame == 1;
-            case 1:
-                return (0 <= col && col <= 2) || (toFrame >= 0 && toFrame <= 2);
-            case 3:
-                return col == 0 || col == 2 || toFrame == 0 || toFrame == 2;
-            default:
-                return false;
-        }
+        return switch (row) {
+            case 0, 2 -> col == 1 || toFrame == 1;
+            case 1 -> (0 <= col && col <= 2) || (toFrame >= 0 && toFrame <= 2);
+            case 3 -> col == 0 || col == 2 || toFrame == 0 || toFrame == 2;
+            default -> false;
+        };
     }
 
     /**
